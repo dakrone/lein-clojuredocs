@@ -8,21 +8,26 @@
   [doc]
   (-> doc
       (update-in [:ns] str)
-      (update-in [:name] str)))
+      (update-in [:name] str)
+      (update-in [:tag] pr-str)
+      (update-in [:arglists] (fn [arglists] (map str arglists)))))
 
 (defn get-project-meta
   "Return a map of information about the project that should be indexed."
-  [project]
-  {:project (str (if (= (:name project) (:group project))
+  [{:keys [name group url description version] :as project}]
+  {:project (str (if (= name group)
                    ""
-                   (str (:group project) "/"))
-                 (:name project))})
+                   (str group "/"))
+                 name)
+   :url url
+   :version version
+   :descripton description})
 
 (defn serialize-docs
   "TODO: Write the docs to a file"
-  [docs]
+  [proj-meta docs]
   #_(pp/print-table [:ns :name :arglists :private :dynamic] docs)
-  (pp/pprint docs))
+  (pp/pprint (assoc proj-meta :vars (vec docs))))
 
 (defn read-file
   "Reads a file, serializing docs to a file for import to ClojureDocs"
@@ -38,12 +43,16 @@
         (println "Error requiring" ns-name e)))
     (let [vars (vals (ns-interns ns-name))
           metas (map meta vars)
-          docs (map munge-doc (map #(merge proj-meta %) metas))]
-      (serialize-docs docs))))
+          docs (->> metas
+                    (map (fn [m] (assoc m :project (:project proj-meta))))
+                    (map munge-doc))]
+      (serialize-docs proj-meta docs))))
 
 
 ;; testing vars
 (def ^{:private true :doc "a test variable"} test-var 42)
+
+(defn ^Long typed-fn [] 5)
 
 (defn- ^:dynamic test-fn
   "A function to test read-file against"
@@ -52,6 +61,7 @@
   ([x y]
      (println x y)))
 
+;; actual lein function
 (defn clojuredocs
   "Publish vars for clojuredocs"
   [project]
