@@ -1,7 +1,10 @@
 (ns leiningen.clojuredocs
   (:require [clojure.java.io :as io]
             [clojure.tools.namespace :as clj-ns]
-            [clojure.pprint :as pp]))
+            [clojure.pprint :as pp]
+            [cheshire.core :as json])
+  (:import (java.io FileOutputStream OutputStreamWriter)
+           (java.util.zip GZIPOutputStream)))
 
 (defn munge-doc
   "Take a map of a clojure symbol, and munge it into an indexable doc map."
@@ -19,12 +22,17 @@
 
 (defn serialize-project-info
   "TODO: Write the docs to a file"
-  [info]
-  (pp/pprint info)
-  (flush))
+  [proj-meta info]
+  (let [filename (str (:name proj-meta) "-" (:version proj-meta) ".json.gz")]
+    (println "[=] Writing output to" filename)
+    (with-open [fos (FileOutputStream. filename)
+                gzs (GZIPOutputStream. fos)
+                os (OutputStreamWriter. gzs)]
+      (.write os (json/encode info)))))
 
 (defn read-namespace
-  "Reads a file, serializing docs to a file for import to ClojureDocs"
+  "Reads a file, returning a map of the namespace to a vector of maps with
+  information about each var in the namespace."
   [f]
   (let [ns-dec (clj-ns/read-file-ns-decl f)
         ns-name (second ns-dec)]
@@ -54,4 +62,5 @@
                         {:namespaces
                          (apply merge (for [source-file source-files]
                                         (read-namespace source-file)))})]
-    (serialize-project-info data-map)))
+    (serialize-project-info proj-meta data-map)
+    (println "[=] Done.")))
