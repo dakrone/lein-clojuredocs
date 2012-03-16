@@ -22,15 +22,14 @@
   (select-keys project [:name :group :url :description :version :group]))
 
 (defn serialize-project-info
-  "TODO: Write the docs to a file"
-  [proj-meta info]
-  (let [filename (str (:name proj-meta) "-" (:version proj-meta) ".json.gz")]
-    (println "[=] Writing output to" filename)
+  "Writes json-encoded project information to a gzipped file."
+  [info]
+  (let [filename (str (:name info) "-" (:version info) ".json.gz")]
+    (println "[-] Writing output to" filename)
     (with-open [fos (FileOutputStream. filename)
                 gzs (GZIPOutputStream. fos)
                 os (OutputStreamWriter. gzs)]
-      (.write os (json/encode info)))
-    #_(pp/pprint info)))
+      (.write os (json/encode info)))))
 
 (defn read-namespace
   "Reads a file, returning a map of the namespace to a vector of maps with
@@ -64,5 +63,5 @@
                         {:namespaces
                          (apply merge (for [source-file source-files]
                                         (read-namespace source-file)))})]
-    (serialize-project-info proj-meta data-map)
+    (serialize-project-info data-map)
     (println "[=] Done.")))
