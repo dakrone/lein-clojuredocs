@@ -4,7 +4,21 @@ FIXME: write description
 
 ## Usage
 
-FIXME: write
+```
+% lein2 install
+```
+
+In ~/.lein/profiles.clj:
+
+```clojure
+{:user {:plugins [[lein-clojuredocs "1.0.0-SNAPSHOT"]]}}
+```
+
+Then in a project:
+
+```
+% lein2 clojuredocs
+```
 
 ## License
 
