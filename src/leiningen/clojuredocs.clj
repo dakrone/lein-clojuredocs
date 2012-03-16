@@ -14,60 +14,44 @@
 
 (defn get-project-meta
   "Return a map of information about the project that should be indexed."
-  [{:keys [name group url description version] :as project}]
-  {:project (str (if (= name group)
-                   ""
-                   (str group "/"))
-                 name)
-   :url url
-   :version version
-   :descripton description})
+  [project]
+  (select-keys project [:name :group :url :description :version :group]))
 
-(defn serialize-docs
+(defn serialize-project-info
   "TODO: Write the docs to a file"
-  [proj-meta docs]
-  #_(pp/print-table [:ns :name :arglists :private :dynamic] docs)
-  (pp/pprint (assoc proj-meta :vars (vec docs))))
+  [info]
+  (pp/pprint info)
+  (flush))
 
-(defn read-file
+(defn read-namespace
   "Reads a file, serializing docs to a file for import to ClojureDocs"
-  [project f]
+  [f]
   (let [ns-dec (clj-ns/read-file-ns-decl f)
-        ns-name (second ns-dec)
-        proj-meta (get-project-meta project)]
+        ns-name (second ns-dec)]
     (printf "[+] Processing %s...\n" (or ns-name f))
     (flush)
     (try
       (require ns-name)
       (catch Exception e
         (println "Error requiring" ns-name e)))
-    (let [vars (vals (ns-interns ns-name))
-          metas (map meta vars)
-          docs (->> metas
-                    (map (fn [m] (assoc m :project (:project proj-meta))))
-                    (map munge-doc))]
-      (serialize-docs proj-meta docs))))
+    {(str ns-name) (->> ns-name
+                        ns-interns
+                        vals
+                        (map meta)
+                        (map munge-doc))}))
 
-
-;; testing vars
-(def ^{:private true :doc "a test variable"} test-var 42)
-
-(defn ^Long typed-fn [] 5)
-
-(defn- ^:dynamic test-fn
-  "A function to test read-file against"
-  ([x]
-     (println x))
-  ([x y]
-     (println x y)))
-
-;; actual lein function
+;; actual lein plugin function
 (defn clojuredocs
   "Publish vars for clojuredocs"
   [project]
   (let [paths (or (:source-paths project) [(:source-path project)])
-        source-files (mapcat #(-> % io/file clj-ns/find-clojure-sources-in-dir)
-                             paths)]
-    (doseq [source-file source-files]
-      (read-file project source-file))
-    (flush)))
+        source-files (mapcat #(-> %
+                                  io/file
+                                  clj-ns/find-clojure-sources-in-dir)
+                             paths)
+        proj-meta (get-project-meta project)
+        data-map (merge proj-meta
+                        {:namespaces
+                         (apply merge (for [source-file source-files]
+                                        (read-namespace source-file)))})]
+    (serialize-project-info data-map)))
