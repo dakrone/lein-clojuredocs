@@ -10,9 +10,10 @@
   "Take a map of a clojure symbol, and munge it into an indexable doc map."
   [doc]
   (-> doc
+      (dissoc :protocol :inline)
       (update-in [:ns] str)
       (update-in [:name] str)
-      (update-in [:tag] pr-str)
+      (update-in [:tag] #(when % (pr-str %)))
       (update-in [:arglists] (fn [arglists] (map str arglists)))))
 
 (defn get-project-meta
@@ -28,7 +29,8 @@
     (with-open [fos (FileOutputStream. filename)
                 gzs (GZIPOutputStream. fos)
                 os (OutputStreamWriter. gzs)]
-      (.write os (json/encode info)))))
+      (.write os (json/encode info)))
+    #_(pp/pprint info)))
 
 (defn read-namespace
   "Reads a file, returning a map of the namespace to a vector of maps with
