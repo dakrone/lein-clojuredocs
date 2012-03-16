@@ -1,13 +1,14 @@
 (ns leiningen.clojuredocs
   (:require [clojure.java.io :as io]
-            [clojure.tools.namespace :as clj-ns])
-  (:use [doric.core :only [table]]))
+            [clojure.tools.namespace :as clj-ns]
+            [clojure.pprint :as pp]))
 
 (defn munge-doc
   "Take a map of a clojure symbol, and munge it into an indexable doc map."
   [doc]
   (-> doc
-      (update-in [:ns] str)))
+      (update-in [:ns] str)
+      (update-in [:name] str)))
 
 (defn get-project-meta
   "Return a map of information about the project that should be indexed."
@@ -15,19 +16,16 @@
   {:project (str (if (= (:name project) (:group project))
                    ""
                    (str (:group project) "/"))
-                 (:name project))
-   :version (:version project)
-   :description (:description project)
-   :url (:url project)})
+                 (:name project))})
 
 (defn serialize-docs
   "TODO: Write the docs to a file"
   [docs]
-  #_(pp/print-table docs)
+  #_(pp/print-table [:ns :name :arglists :private :dynamic] docs)
   (pp/pprint docs))
 
 (defn read-file
-  "Reads a file"
+  "Reads a file, serializing docs to a file for import to ClojureDocs"
   [project f]
   (let [ns-dec (clj-ns/read-file-ns-decl f)
         ns-name (second ns-dec)
@@ -45,7 +43,7 @@
 
 
 ;; testing vars
-(def ^{:dynamic true :private true :doc "a test variable"} test-var 42)
+(def ^{:private true :doc "a test variable"} test-var 42)
 
 (defn- ^:dynamic test-fn
   "A function to test read-file against"
@@ -61,5 +59,5 @@
         source-files (mapcat #(-> % io/file clj-ns/find-clojure-sources-in-dir)
                              paths)]
     (doseq [source-file source-files]
-      (cd/read-file project source-file))
+      (read-file project source-file))
     (flush)))
