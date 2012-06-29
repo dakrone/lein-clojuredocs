@@ -19,6 +19,10 @@ Then in a project:
 % lein2 clojuredocs
 ```
 
+### If your project doesn't have a project.clj
+
+You should add one.
+
 Example of creating a project.clj file for one of the Clojure 1.3
 contrib libraries, java.jdbc.
 
