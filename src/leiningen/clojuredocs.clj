@@ -1,5 +1,5 @@
 (ns leiningen.clojuredocs
-  (:require [clojuredocs.analyzer :as analyzer]
+  (:require [clojuredocs.analyzer]
             [leiningen.core.eval :as lein]))
 
 ;; actual lein plugin function
@@ -8,4 +8,5 @@
   [project]
   (lein/eval-in-project
    (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0-SNAPSHOT"])
-   (analyzer/gen-project-docs project)))
+   `(clojuredocs.analyzer/gen-project-docs ~project)
+   `(require 'clojuredocs.analyzer)))
