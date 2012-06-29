@@ -3,8 +3,6 @@
             [clojure.tools.namespace :as clj-ns]
             [leiningen.clojuredocs :as cd]))
 
-(def clj-version "1.4.0")
-
 (def clojure-project
   {:name "clojure"
    :group "org.clojure"
@@ -13,7 +11,7 @@
    :scm "http://github.com/clojure/clojure"
    :license {:name "Eclipse Public License"
              :url "http://www.eclipse.org/legal/epl-v10.html"}
-   :version clj-version})
+   :version (clojure-version)})
 
 (def blacklist
   #{"core_deftype.clj"
