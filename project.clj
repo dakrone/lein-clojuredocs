@@ -4,4 +4,4 @@
   :eval-in :leiningen
   :dependencies [[org.clojure/clojure "1.3.0"]
                  [org.clojure/tools.namespace "0.1.2"]
-                 [cheshire "3.0.0"]])
+                 [cheshire "4.0.0"]])
