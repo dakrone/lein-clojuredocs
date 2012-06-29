@@ -49,6 +49,15 @@
                         (map meta)
                         (map munge-doc))}))
 
+(defn generate-all-data
+  [project source-files]
+  (let [proj-meta (get-project-meta project)
+        data-map (merge proj-meta
+                        {:namespaces
+                         (apply merge (for [source-file source-files]
+                                        (read-namespace source-file)))})]
+    data-map))
+
 ;; actual lein plugin function
 (defn clojuredocs
   "Publish vars for clojuredocs"
@@ -58,10 +67,6 @@
                                   io/file
                                   clj-ns/find-clojure-sources-in-dir)
                              paths)
-        proj-meta (get-project-meta project)
-        data-map (merge proj-meta
-                        {:namespaces
-                         (apply merge (for [source-file source-files]
-                                        (read-namespace source-file)))})]
+        data-map (generate-all-data project source-files)]
     (serialize-project-info data-map)
     (println "[=] Done.")))
