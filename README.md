@@ -19,6 +19,20 @@ Then in a project:
 % lein2 clojuredocs
 ```
 
+### Generating data for clojure/core
+
+```clojure
+;; Inside the lein-clojuredocs project:
+% lein repl
+user=> (use 'clojuredocs.analyzer)
+nil
+;; then, run it against the directory of a clojure checkout for 1.4
+user=> (gen-clojure "/Users/hinmanm/src/clojure")
+;; ...output ensure...
+```
+
+And clojure-1.4.0.json.gz should be generated.
+
 ### If your project doesn't have a project.clj
 
 You should add one.
