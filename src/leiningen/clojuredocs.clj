@@ -8,5 +8,5 @@
   [project]
   (lein/eval-in-project
    (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0-SNAPSHOT"])
-   `(clojuredocs.analyzer/gen-project-docs ~project)
-   `(require 'clojuredocs.analyzer)))
+   `(clojuredocs.analyzer/gen-project-docs '~project)
+   '(require 'clojuredocs.analyzer)))
