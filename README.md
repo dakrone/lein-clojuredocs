@@ -28,7 +28,7 @@ user=> (use 'clojuredocs.analyzer)
 nil
 ;; then, run it against the directory of a clojure checkout for 1.4
 user=> (gen-clojure "/Users/hinmanm/src/clojure")
-;; ...output ensure...
+;; ...output ensues...
 ```
 
 And clojure-1.4.0.json.gz should be generated.
