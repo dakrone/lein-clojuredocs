@@ -1,6 +1,9 @@
 # lein-clojuredocs
 
-FIXME: write description
+lein-clojuredocs gives you a way to generate data that can be indexed
+for a new clojuredocs project. It's still heavily a work in progress,
+but I'd appreciate any bug reports when running this against your own
+project.
 
 ## Usage
 
