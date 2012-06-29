@@ -4,18 +4,10 @@ FIXME: write description
 
 ## Usage
 
-Run this command within your copy of the lein-clojuredocs repository.
-It will install a compiled version of lein-clojuredocs in your
-local Maven repository, which by default is in ~/.m2
-
-```
-% lein2 install
-```
-
 In ~/.lein/profiles.clj:
 
 ```clojure
-{:user {:plugins [[lein-clojuredocs "1.0.0-SNAPSHOT"]]}}
+{:user {:plugins [[lein-clojuredocs "1.0.0"]]}}
 ```
 
 Then in a project:

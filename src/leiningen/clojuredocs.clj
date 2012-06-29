@@ -7,6 +7,6 @@
   "Publish vars for clojuredocs"
   [project]
   (lein/eval-in-project
-   (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0-SNAPSHOT"])
+   (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0"])
    `(clojuredocs.analyzer/gen-project-docs '~project)
    '(require 'clojuredocs.analyzer)))
