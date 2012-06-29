@@ -118,3 +118,4 @@
 ;; How to use this to generate clojure/doc data:
 #_
 (gen-clojure "/Users/hinmanm/src/clojure")
+;; will generate 'clojure-1.4.0.json.gz' in the root directory
