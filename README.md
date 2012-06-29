@@ -19,6 +19,12 @@ Then in a project:
 % lein2 clojuredocs
 ```
 
+A great way to check what the output looks like in a readable format:
+
+```
+% zcat < fooproject-1.0.0.json.gz | python -mjson.tool
+```
+
 ### Generating data for clojure/core
 
 ```clojure
