@@ -30,14 +30,12 @@
 
 (defn gen-clojure [clojure-dir]
   (let [clj-src-dir (file clojure-dir "src" "clj")
-        _ (println :clj-src-dir clj-src-dir)
         clj-files (clj-ns/find-clojure-sources-in-dir clj-src-dir)
         clj-files (remove #(contains? blacklist (.getName %)) clj-files)
         data-map (cd/generate-all-data clojure-project clj-files)]
-    data-map))
+    (cd/serialize-project-info data-map)
+    (println "[=] Done.")))
 
-(defn gen-project [project]
-  (cd/clojuredocs project))
-
+;; How to use this to generate clojure/doc data:
 #_
 (gen-clojure "/Users/hinmanm/src/clojure")
