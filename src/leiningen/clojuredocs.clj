@@ -10,7 +10,7 @@
   "Take a map of a clojure symbol, and munge it into an indexable doc map."
   [doc]
   (-> doc
-      (dissoc :protocol :inline)
+      (dissoc :protocol :inline :inline-arities)
       (update-in [:ns] str)
       (update-in [:name] str)
       (update-in [:tag] #(when % (pr-str %)))
