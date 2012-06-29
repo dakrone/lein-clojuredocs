@@ -19,7 +19,7 @@
 (defn get-project-meta
   "Return a map of information about the project that should be indexed."
   [project]
-  (select-keys project [:name :group :url :description :version :group]))
+  (select-keys project [:name :url :description :version :group]))
 
 (defn serialize-project-info
   "Writes json-encoded project information to a gzipped file."
