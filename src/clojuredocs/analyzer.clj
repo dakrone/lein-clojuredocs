@@ -66,19 +66,20 @@
   "Reads a file, returning a map of the namespace to a vector of maps with
   information about each var in the namespace."
   [f]
-  (let [ns-dec (clj-ns/read-file-ns-decl f)
-        ns-name (second ns-dec)]
-    (printf "[+] Processing %s...\n" (or ns-name f))
-    (flush)
-    (try
+  (try
+    (let [ns-dec (clj-ns/read-file-ns-decl f)
+          ns-name (second ns-dec)]
+      (printf "[+] Processing %s...\n" (or ns-name f))
+      (flush)
       (require ns-name)
-      (catch Exception e
-        (println "Error requiring" ns-name e)))
-    {(str ns-name) (->> ns-name
-                        ns-interns
-                        vals
-                        (map meta)
-                        (map munge-doc))}))
+      {(str ns-name) (->> ns-name
+                          ns-interns
+                          vals
+                          (map meta)
+                          (map munge-doc))})
+    (catch Exception e
+      (printf "Unable to parse: (%s): %s\n" f e)
+      {})))
 
 (defn generate-all-data
   "Given a project map and list of source files, return a map of metadata about
