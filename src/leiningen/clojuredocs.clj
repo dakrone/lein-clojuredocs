@@ -1,8 +1,11 @@
 (ns leiningen.clojuredocs
-  (:require [clojuredocs.analyzer :as analyzer]))
+  (:require [clojuredocs.analyzer :as analyzer]
+            [leiningen.core.eval :as lein]))
 
 ;; actual lein plugin function
 (defn clojuredocs
   "Publish vars for clojuredocs"
   [project]
-  (analyzer/gen-project-docs project))
+  (lein/eval-in-project
+   (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0-SNAPSHOT"])
+   (analyzer/gen-project-docs project)))

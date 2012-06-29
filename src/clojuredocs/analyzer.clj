@@ -78,7 +78,7 @@
                           (map meta)
                           (map munge-doc))})
     (catch Exception e
-      (printf "Unable to parse: (%s): %s\n" f e)
+      (printf "Unable to parse (%s): %s\n" f e)
       {})))
 
 (defn generate-all-data
