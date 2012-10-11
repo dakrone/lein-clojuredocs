@@ -1,6 +1,7 @@
 (ns clojuredocs.analyzer
   (:require [clojure.java.io :as io]
-            [clojure.tools.namespace :as clj-ns]
+            [clojure.tools.namespace.file :as ns-file]
+            [clojure.tools.namespace.find :as ns-find]
             [cheshire.core :as json])
   (:import (java.io FileOutputStream OutputStreamWriter)
            (java.util.zip GZIPOutputStream)))
@@ -67,7 +68,7 @@
   information about each var in the namespace."
   [f]
   (try
-    (let [ns-dec (clj-ns/read-file-ns-decl f)
+    (let [ns-dec (ns-file/read-file-ns-decl f)
           ns-name (second ns-dec)]
       (printf "[+] Processing %s...\n" (or ns-name f))
       (flush)
@@ -98,7 +99,7 @@
   can be read correctly."
   [clojure-dir]
   (let [clj-src-dir (io/file clojure-dir "src" "clj")
-        clj-files (clj-ns/find-clojure-sources-in-dir clj-src-dir)
+        clj-files (ns-find/find-clojure-sources-in-dir clj-src-dir)
         clj-files (remove #(contains? blacklist (.getName %)) clj-files)
         data-map (generate-all-data clojure-project clj-files)]
     (serialize-project-info data-map)
@@ -110,7 +111,7 @@
   (let [paths (or (:source-paths project) [(:source-path project)])
         source-files (mapcat #(-> %
                                   io/file
-                                  clj-ns/find-clojure-sources-in-dir)
+                                  ns-find/find-clojure-sources-in-dir)
                              paths)
         data-map (generate-all-data project source-files)]
     (serialize-project-info data-map)
