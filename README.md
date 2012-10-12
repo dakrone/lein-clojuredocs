@@ -27,17 +27,7 @@ A great way to check what the output looks like in a readable format:
 
 ### Generating data for clojure/core
 
-```clojure
-;; Inside the lein-clojuredocs project:
-% lein repl
-user=> (use 'clojuredocs.analyzer)
-nil
-;; then, run it against the directory of a clojure checkout for 1.4
-user=> (gen-clojure "/Users/hinmanm/src/clojure")
-;; ...output ensues...
-```
-
-And clojure-1.4.0.json.gz should be generated.
+See: [cadastre](https://github.com/dakrone/cadastre)
 
 ### If your project doesn't have a project.clj
 
