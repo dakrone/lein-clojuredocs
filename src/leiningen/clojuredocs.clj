@@ -1,12 +1,13 @@
 (ns leiningen.clojuredocs
-  (:require [clojuredocs.analyzer]
-            [leiningen.core.eval :as lein]))
+  (:require [leiningen.core.eval :as lein]))
 
 ;; actual lein plugin function
 (defn clojuredocs
   "Publish vars for clojuredocs"
   [project]
   (lein/eval-in-project
-   (update-in project [:dependencies] conj ['lein-clojuredocs "1.0.0"])
-   `(clojuredocs.analyzer/gen-project-docs '~project)
-   '(require 'clojuredocs.analyzer)))
+   (-> project
+       (update-in [:dependencies] conj ['cadastre "0.1.0-SNAPSHOT"]))
+   `(binding [cadastre.analyzer/*verbose* true]
+      (cadastre.analyzer/gen-project-docs-json '~project))
+   '(require 'cadastre.analyzer)))
