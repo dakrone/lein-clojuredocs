@@ -1,4 +1,4 @@
-(defproject lein-clojuredocs "1.0.1-SNAPSHOT"
+(defproject lein-clojuredocs "1.0.1"
   :url "https://github.com/dakrone/lein-clojuredocs"
   :description "Generate data for clojuredocs"
   :eval-in :leiningen
