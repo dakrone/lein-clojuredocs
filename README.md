@@ -10,7 +10,7 @@ project.
 In ~/.lein/profiles.clj:
 
 ```clojure
-{:user {:plugins [[lein-clojuredocs "1.0.1"]]}}
+{:user {:plugins [[lein-clojuredocs "1.0.2"]]}}
 ```
 
 Then in a project:
