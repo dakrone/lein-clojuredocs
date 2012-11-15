@@ -91,6 +91,10 @@ contrib libraries, java.jdbc.
 [=] Done.
 ```
 
+## See Also
+
+- [cadastre](http://github.com/dakrone/cadastre)
+- [eisago](http://github.com/dakrone/eisago)
 
 ## License
 
