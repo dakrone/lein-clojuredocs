@@ -1,5 +1,7 @@
 # lein-clojuredocs
 
+[![Join the chat at https://gitter.im/dakrone/lein-clojuredocs](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dakrone/lein-clojuredocs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 lein-clojuredocs gives you a way to generate data that can be indexed
 for a new clojuredocs project. It's still heavily a work in progress,
 but I'd appreciate any bug reports when running this against your own
